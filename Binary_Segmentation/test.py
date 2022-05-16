@@ -30,7 +30,7 @@ for img in os.listdir(image_path):
     image = Image.open(image_path+img)
     image = image.resize((256,256), resample=Image.NEAREST)
     image = transforms.ToTensor()(image)
-    # image = transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))(image)
+    image = transforms.Normalize((0.5,0.5,0.5),(0.5,0.5,0.5))(image)
     image = image.unsqueeze(0)
     image = image.to(device, dtype=torch.float32)
 

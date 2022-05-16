@@ -4,7 +4,7 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torch.nn as nn
 from tqdm import tqdm
-from dataset import Custom_Dateset
+from Binary_Segmentation.dataset import Custom_Dateset
 import torch.utils.data.dataloader
 
 transform = transforms.Compose(

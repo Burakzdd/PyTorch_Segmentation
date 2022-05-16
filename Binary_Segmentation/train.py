@@ -4,15 +4,8 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 import torch.nn as nn
 from tqdm import tqdm
-from MultiClass_Segmentation.dataset import Custom_Dateset
+from dataset import Custom_Dateset
 import torch.utils.data.dataloader
-
-transform = transforms.Compose(
-    [
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ]
-)
 
 img_path = "/home/burakzdd/Desktop/work/torch_segmentation/segmentation_full_body_mads_dataset_1192_img/images/"
 mask_path = "/home/burakzdd/Desktop/work/torch_segmentation/segmentation_full_body_mads_dataset_1192_img/masks/"
