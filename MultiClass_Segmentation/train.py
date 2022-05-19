@@ -1,36 +1,27 @@
 import segmentation_models_pytorch as smp
 import torch
 import torch.nn as nn
-import torchvision.transforms as transforms
-import torch.nn as nn
 from tqdm import tqdm
-from Binary_Segmentation.dataset import Custom_Dateset
+from dataset import Custom_Dateset
 import torch.utils.data.dataloader
 
-transform = transforms.Compose(
-    [
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ]
-)
 
-img_path = ""
-mask_path = ""
-batch_size = 4
+img_path = "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/dataset/IMAGES/"
+mask_path = "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/dataset/MASKS/"
+batch_size = 8
 epochs = 30
 
 train_dataset = Custom_Dateset(img_path, mask_path, input_size=(256, 256))
-train_loader = torch.utils.data.DataLoader(
-    train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda:0")
 print("Device:"+str(device))
 
 model = smp.Unet(
     encoder_name="resnet18",
     encoder_weights="imagenet",
     in_channels=3,
-    classes=5
+    classes= 65
 )
 model = model.to(device)
 
@@ -46,9 +37,8 @@ for epoch in range(epochs):
     for batch_index, (image, mask) in loop:
         image, mask = image.to(device), mask.to(device)
         output = model(image)
-        mask = mask.float()
-        mask = mask.unsqueeze(0)
-        mask = mask.permute(1, 0, 2, 3)
+
+   
         loss = criterion(output, mask)
 
         optimizer.zero_grad()
@@ -62,4 +52,5 @@ for epoch in range(epochs):
                          lr=optimizer.param_groups[0]["lr"])
 
     torch.save(model.state_dict(
-    ), "/home/burakzdd/my_workspace/PyTorch_Segmentation/Multi_Segmentation/weights/model.pth")
+    ), "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/weights/model.pth")
+
