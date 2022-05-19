@@ -8,8 +8,8 @@ import torch.utils.data.dataloader
 
 img_path = "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/dataset/IMAGES/"
 mask_path = "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/dataset/MASKS/"
-batch_size = 8
-epochs = 30
+batch_size = 4
+epochs = 80
 
 train_dataset = Custom_Dateset(img_path, mask_path, input_size=(256, 256))
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
@@ -18,10 +18,10 @@ device = torch.device("cuda:0")
 print("Device:"+str(device))
 
 model = smp.Unet(
-    encoder_name="resnet18",
+    encoder_name="resnet34",
     encoder_weights="imagenet",
     in_channels=3,
-    classes= 65
+    classes= 64
 )
 model = model.to(device)
 

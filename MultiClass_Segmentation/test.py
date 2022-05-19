@@ -12,14 +12,14 @@ import os
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 model =smp.Unet(
-    encoder_name="resnet18",
+    encoder_name="resnet34",
     encoder_weights="imagenet",
     in_channels=3,
-    classes=65
+    classes=64
 )
 
 model = model.to(device)
-model.load_state_dict(torch.load("./weights/model.pth"))
+model.load_state_dict(torch.load("/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/weights/model.pth"))
 model.eval()
 
 image_path = "/home/burakzdd/my_workspace/PyTorch_Segmentation/MultiClass_Segmentation/dataset/test/image/"
@@ -41,13 +41,14 @@ for img in os.listdir(image_path):
     mask_out = prediction.cpu().numpy()
     mask_out = mask_out.astype("uint8")
     image = cv2.imread(image_path+img)
-    mask_image = cv2.imread(mask_path+img)
+    mask_image = cv2.imread((mask_path+img),0)
     
     w,h = image.shape[:2]
     mask_out = cv2.resize(mask_out, (h, w))
+    img_h = cv2.hconcat([mask_image,mask_out])
     cv2.imshow("img",image)
-    cv2.imshow("mask",mask_image)
-    cv2.imshow("output", mask_out)
+    # cv2.imshow("mask",mask_image)
+    cv2.imshow("mask-output", img_h)
     
     cv2.waitKey()
     
